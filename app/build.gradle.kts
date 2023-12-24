@@ -69,8 +69,8 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     // NavController
-    val navControllerVersion = "2.7.6"
-    implementation("androidx.navigation:navigation-compose:$navControllerVersion")
+    val navigationVersion = "2.7.6"
+    implementation("androidx.navigation:navigation-compose:$navigationVersion")
 
     // Material Design
     implementation("androidx.compose.material3:material3")

@@ -1,4 +1,4 @@
-package com.nickel.bpch.core.navigation
+package com.nickel.bpch.ui.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
@@ -15,52 +15,39 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 
-data class BottomNavigationItem(
-    val title: String,
-    val selectedIcon: ImageVector,
-    val unselectedIcon: ImageVector,
-    val hasNews: Boolean,
-    val badgeCount: Int? = null
-)
+
+@Composable
+fun BottomNavigation(
+    viewModel: BottomNavigationViewModel = hiltViewModel()
+) {
+
+    val uiState by viewModel.state.collectAsState()
+
+    BottomNavigationBar(
+        items = uiState.navigationItems,
+        selectedItemIndex = uiState.selectedIndex,
+        onItemClick = viewModel::onItemClick
+    )
+
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomNavigation() {
-    val items = listOf(
-        BottomNavigationItem(
-            title = "Home",
-            selectedIcon = Icons.Filled.Home,
-            unselectedIcon = Icons.Outlined.Home,
-            hasNews = false
-        ),
-        BottomNavigationItem(
-            title = "Friends",
-            selectedIcon = Icons.Filled.People,
-            unselectedIcon = Icons.Outlined.People,
-            hasNews = false,
-            badgeCount = 42
-        ),
-        BottomNavigationItem(
-            title = "Settings",
-            selectedIcon = Icons.Filled.Settings,
-            unselectedIcon = Icons.Outlined.Settings,
-            hasNews = true
-        )
-    )
-    var selectedItemIndex by rememberSaveable {
-        mutableIntStateOf(0)
-    }
-
+private fun BottomNavigationBar(
+    items: List<BottomNavigationItem>,
+    selectedItemIndex: Int,
+    onItemClick: (Int) -> Unit
+) {
     NavigationBar {
         items.forEachIndexed { index, item ->
             NavigationBarItem(
                 selected = selectedItemIndex == index,
-                onClick = { selectedItemIndex = index },
+                onClick = { onItemClick(index) },
                 label = { Text(text = item.title) },
                 alwaysShowLabel = false,
                 icon = {
@@ -86,4 +73,34 @@ fun BottomNavigation() {
             )
         }
     }
+}
+
+@Preview
+@Composable
+private fun BottomNavigationBarPreview() {
+    BottomNavigationBar(
+        items = listOf(
+            BottomNavigationItem(
+                title = "Home",
+                selectedIcon = Icons.Filled.Home,
+                unselectedIcon = Icons.Outlined.Home,
+                hasNews = false
+            ),
+            BottomNavigationItem(
+                title = "Friends",
+                selectedIcon = Icons.Filled.People,
+                unselectedIcon = Icons.Outlined.People,
+                hasNews = false,
+                badgeCount = 42
+            ),
+            BottomNavigationItem(
+                title = "Settings",
+                selectedIcon = Icons.Filled.Settings,
+                unselectedIcon = Icons.Outlined.Settings,
+                hasNews = true
+            )
+        ),
+        selectedItemIndex = 0,
+        onItemClick = {}
+    )
 }
