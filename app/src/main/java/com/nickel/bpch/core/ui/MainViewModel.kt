@@ -1,4 +1,4 @@
-package com.nickel.bpch
+package com.nickel.bpch.core.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,6 +14,8 @@ class MainViewModel @Inject constructor(): ViewModel() {
 
     private val _state = MutableStateFlow(false)
     val state = _state.asStateFlow()
+
+
 
     init {
         viewModelScope.launch {

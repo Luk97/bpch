@@ -1,4 +1,4 @@
-package com.nickel.bpch.ui.theme
+package com.nickel.bpch.core.ui.theme
 
 import android.app.Activity
 import android.os.Build
@@ -20,7 +20,8 @@ private val darkColorScheme = darkColorScheme(
     secondary = Orange,
     tertiary = Purple,
     background = DarkGray,
-    onBackground = White
+    onBackground = White,
+    onPrimary = White
 )
 
 private val lightColorScheme = lightColorScheme(
@@ -28,7 +29,8 @@ private val lightColorScheme = lightColorScheme(
     secondary = Orange,
     tertiary = Purple,
     background = White,
-    onBackground = DarkGray
+    onBackground = DarkGray,
+    onPrimary = DarkGray
 )
 
 @Composable

@@ -1,4 +1,4 @@
-package com.nickel.bpch.ui.theme
+package com.nickel.bpch.core.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

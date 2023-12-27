@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">BPCH</string>
+    <string name="logo">bpch Logo</string>
+    <string name="login">Login</string>
+    <string name="password_hint">your password</string>
+    <string name="email_hint">your email</string>
 </resources>
