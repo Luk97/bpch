@@ -1,6 +1,5 @@
 package com.nickel.bpch.core.ui.navigation
 
-import android.util.Log
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
@@ -21,7 +20,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -39,19 +37,19 @@ class BottomNavigationViewModel @Inject constructor(): ViewModel() {
                     hasNews = false
                 ),
                 BottomNavigationItem(
+                    title = "Quick Match",
+                    route = Screen.QuickMatchScreen.route,
+                    selectedIcon = Icons.Filled.Star,
+                    unselectedIcon = Icons.Outlined.Star,
+                    hasNews = false
+                ),
+                BottomNavigationItem(
                     title = "Profile",
                     route = Screen.ProfileScreen.route,
                     selectedIcon = Icons.Filled.Person,
                     unselectedIcon = Icons.Outlined.Person,
                     hasNews = false,
                     badgeCount = 42
-                ),
-                BottomNavigationItem(
-                    title = "Quick Match",
-                    route = Screen.QuickMatchScreen.route,
-                    selectedIcon = Icons.Filled.Star,
-                    unselectedIcon = Icons.Outlined.Star,
-                    hasNews = false
                 ),
                 BottomNavigationItem(
                     title = "Settings",
@@ -61,7 +59,6 @@ class BottomNavigationViewModel @Inject constructor(): ViewModel() {
                     hasNews = true
                 )
             ),
-            selectedIndex = 0
         )
     )
     val state = _state.asStateFlow()
@@ -69,13 +66,8 @@ class BottomNavigationViewModel @Inject constructor(): ViewModel() {
     private val _event = MutableSharedFlow<UiEvent>()
     val event = _event.asSharedFlow()
 
-    init {
-        Log.d("TAG", "inside init")
-    }
-
     fun onItemClick(index: Int) {
         viewModelScope.launch {
-            _state.update { it.copy(selectedIndex = index) }
             _event.emit(
                 Navigate(
                     _state.value.navigationItems[index].route
@@ -86,14 +78,12 @@ class BottomNavigationViewModel @Inject constructor(): ViewModel() {
 
     data class UiState(
         val navigationItems: List<BottomNavigationItem>,
-        val selectedIndex: Int
     )
 }
 
 data class BottomNavigationItem(
     val title: String,
     val route: String,
-    val selected: Boolean = false,
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector,
     val hasNews: Boolean,

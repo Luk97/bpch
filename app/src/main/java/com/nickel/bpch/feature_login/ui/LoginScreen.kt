@@ -45,12 +45,14 @@ fun LoginScreen(
     modifier: Modifier = Modifier,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
+    //TODO: this needs to be refactored into smaller ui pieces
     val state by viewModel.state.collectAsState()
 
     LaunchedEffect(key1 = Unit) {
         viewModel.event.collectLatest { event ->
             when (event) {
                 is Navigate -> {
+                    navController.popBackStack()
                     navController.navigate(event.route)
                 }
                 else -> {}

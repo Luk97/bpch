@@ -33,11 +33,19 @@ fun BottomNavigation(
 
     val uiState by viewModel.state.collectAsState()
 
+    val selectedIndex = uiState.navigationItems.indexOf(
+        uiState.navigationItems.find { it.route == navController.currentDestination?.route }
+    )
+
+
     LaunchedEffect(key1 = Unit) {
         viewModel.event.collectLatest { event ->
             when (event) {
                 is Navigate -> {
-                    navController.navigate(event.route)
+                    if (event.route != navController.currentDestination?.route) {
+                        navController.popBackStack()
+                        navController.navigate(event.route)
+                    }
                 }
                 else -> {}
             }
@@ -46,10 +54,9 @@ fun BottomNavigation(
 
     BottomNavigationBar(
         items = uiState.navigationItems,
-        selectedIndex = uiState.selectedIndex,
+        selectedIndex = selectedIndex,
         onItemClick = viewModel::onItemClick
     )
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -62,7 +69,7 @@ private fun BottomNavigationBar(
     NavigationBar {
         items.forEachIndexed { index, item ->
             NavigationBarItem(
-                selected = item.selected,
+                selected = index == selectedIndex,
                 onClick = { onItemClick(index) },
                 label = { Text(text = item.title) },
                 alwaysShowLabel = false,
