@@ -1,4 +1,4 @@
-package com.nickel.bpch.core.ui.navigation
+package com.nickel.bpch.core.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
@@ -12,7 +12,6 @@ import androidx.compose.material.icons.outlined.Star
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nickel.bpch.core.util.Screen
 import com.nickel.bpch.core.util.UiEvent
 import com.nickel.bpch.core.util.UiEvent.Navigate
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,7 +23,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class BottomNavigationViewModel @Inject constructor(): ViewModel() {
+class BottomNavigationViewModel @Inject constructor() : ViewModel() {
 
     private val _state = MutableStateFlow(
         UiState(
@@ -70,7 +69,7 @@ class BottomNavigationViewModel @Inject constructor(): ViewModel() {
         viewModelScope.launch {
             _event.emit(
                 Navigate(
-                    _state.value.navigationItems[index].route
+                    route = _state.value.navigationItems[index].route
                 )
             )
         }

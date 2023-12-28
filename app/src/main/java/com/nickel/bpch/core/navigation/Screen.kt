@@ -1,4 +1,4 @@
-package com.nickel.bpch.core.util
+package com.nickel.bpch.core.navigation
 
 sealed class Screen(val route: String) {
     data object LoginScreen: Screen("login_screen")

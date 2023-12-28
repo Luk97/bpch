@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.nickel.bpch.core.ui.theme.BPCHTheme
-import com.nickel.bpch.core.util.Navigation
+import com.nickel.bpch.core.navigation.Navigation
 import dagger.hilt.android.AndroidEntryPoint
 
 

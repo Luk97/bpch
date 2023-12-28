@@ -1,4 +1,4 @@
-package com.nickel.bpch.core.util
+package com.nickel.bpch.core.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
