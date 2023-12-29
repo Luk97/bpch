@@ -95,7 +95,9 @@ private fun BottomNavigationBar(
                                     Text(text = item.badgeCount.toString())
                                 }
                             } else if (item.hasNews) {
-                                Badge()
+                                Badge(
+                                    containerColor = SoftRed
+                                )
                             }
                         }
                     ) {

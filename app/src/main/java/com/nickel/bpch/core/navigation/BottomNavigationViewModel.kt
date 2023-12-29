@@ -9,6 +9,8 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material.icons.outlined.StarOutline
+import androidx.compose.material.icons.outlined.TableView
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -39,7 +41,7 @@ class BottomNavigationViewModel @Inject constructor() : ViewModel() {
                     title = "Quick Match",
                     route = Screen.QuickMatchScreen.route,
                     selectedIcon = Icons.Filled.Star,
-                    unselectedIcon = Icons.Outlined.Star,
+                    unselectedIcon = Icons.Outlined.StarOutline,
                     hasNews = false
                 ),
                 BottomNavigationItem(

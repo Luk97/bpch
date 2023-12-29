@@ -8,11 +8,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import com.nickel.bpch.core.ui.MainViewModel.UiState.Loading
+import com.nickel.bpch.core.ui.MainViewModel.UiState.Success
+import kotlinx.coroutines.flow.update
 
 @HiltViewModel
 class MainViewModel @Inject constructor(): ViewModel() {
 
-    private val _state = MutableStateFlow(false)
+    private val _state = MutableStateFlow<UiState>(Loading)
     val state = _state.asStateFlow()
 
 
@@ -20,7 +23,12 @@ class MainViewModel @Inject constructor(): ViewModel() {
     init {
         viewModelScope.launch {
             delay(1000L)
-            _state.value = true
+            _state.update { Success }
         }
+    }
+
+    sealed interface UiState {
+        data object Loading: UiState
+        data object Success: UiState
     }
 }
