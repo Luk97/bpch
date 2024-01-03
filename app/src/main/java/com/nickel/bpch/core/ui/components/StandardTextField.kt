@@ -1,7 +1,9 @@
 package com.nickel.bpch.core.ui.components
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Mail
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -17,7 +19,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
-import com.nickel.bpch.core.ui.theme.carlito
+import com.nickel.bpch.core.ui.theme.BPCHTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -26,8 +28,8 @@ fun StandardTextField(
     hint: String = "",
     error: String = "",
     onValueChange: (String) -> Unit,
-    onPasswordVisibilityChange: () -> Unit = {},
-    passwordVisible: Boolean = false,
+    onTextVisibilityChange: () -> Unit = {},
+    textVisible: Boolean = false,
     style: TextStyle = MaterialTheme.typography.bodySmall,
     singleLine: Boolean = true,
     keyboardType: KeyboardType = KeyboardType.Text,
@@ -48,7 +50,7 @@ fun StandardTextField(
         keyboardOptions = KeyboardOptions(
             keyboardType = keyboardType
         ),
-        visualTransformation = if (keyboardType == KeyboardType.Password && !passwordVisible) {
+        visualTransformation = if (keyboardType == KeyboardType.Password && !textVisible) {
             PasswordVisualTransformation()
         } else {
             VisualTransformation.None
@@ -62,10 +64,10 @@ fun StandardTextField(
         trailingIcon = if (keyboardType == KeyboardType.Password) {
             val icon: @Composable () -> Unit = {
                 IconButton(
-                    onClick = onPasswordVisibilityChange
+                    onClick = onTextVisibilityChange
                 ) {
                     Icon(
-                        imageVector = if (passwordVisible) {
+                        imageVector = if (textVisible) {
                             Icons.Filled.VisibilityOff
                         } else {
                             Icons.Filled.Visibility
@@ -81,11 +83,26 @@ fun StandardTextField(
 
 @Preview
 @Composable
-private fun StandardTextFieldPreview() {
-    StandardTextField(
-        text = "",
-        hint = "example hint",
-        style = TextStyle(fontFamily = carlito),
-        onValueChange = {},
-    )
+private fun LightModePreview() {
+    BPCHTheme {
+        StandardTextField(
+            text = "",
+            hint = "example hint",
+            onValueChange = {},
+            leadingIcon = Icons.Filled.Mail
+        )
+    }
+
+}
+@Preview(uiMode = UI_MODE_NIGHT_YES)
+@Composable
+private fun DarkModePreview() {
+    BPCHTheme {
+        StandardTextField(
+            text = "",
+            hint = "example hint",
+            onValueChange = {},
+            leadingIcon = Icons.Filled.Mail
+        )
+    }
 }

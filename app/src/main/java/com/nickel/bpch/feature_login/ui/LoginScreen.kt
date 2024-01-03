@@ -1,6 +1,8 @@
 package com.nickel.bpch.feature_login.ui
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -33,7 +35,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.nickel.bpch.R
 import com.nickel.bpch.core.ui.components.StandardTextField
-import com.nickel.bpch.core.ui.theme.Cyan
+import com.nickel.bpch.core.ui.theme.BPCHTheme
 import com.nickel.bpch.core.ui.theme.Shapes
 import com.nickel.bpch.core.ui.theme.SpaceLarge
 import com.nickel.bpch.core.ui.theme.SpaceMedium
@@ -46,8 +48,7 @@ fun LoginScreen(
     modifier: Modifier = Modifier,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
-    //TODO: this needs to be refactored into smaller ui pieces
-    val state by viewModel.state.collectAsState()
+    val uiState by viewModel.state.collectAsState()
 
     LaunchedEffect(key1 = Unit) {
         viewModel.event.collectLatest { event ->
@@ -56,7 +57,6 @@ fun LoginScreen(
                     navController.popBackStack()
                     navController.navigate(event.route)
                 }
-                else -> {}
             }
         }
     }
@@ -64,63 +64,97 @@ fun LoginScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(SpaceLarge),
+            .padding(SpaceLarge)
+            .background(MaterialTheme.colorScheme.background),
     ) {
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.25f)
-                .padding(top = SpaceLarge),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.Top
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.bpch_logo) ,
-                contentDescription = stringResource(id = R.string.logo),
-            )
-        }
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .border(4.dp, MaterialTheme.colorScheme.primary, Shapes.extraLarge),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Spacer(modifier = Modifier.height(SpaceLarge))
-            Text(text = "Login", style = MaterialTheme.typography.headlineSmall)
-            Spacer(modifier = Modifier.height(SpaceMedium))
-            StandardTextField(
-                text = state.email,
-                hint = stringResource(id = R.string.email_hint),
-                onValueChange = viewModel::onEmailValueChange,
-                keyboardType = KeyboardType.Email,
-                leadingIcon = Icons.Rounded.Email
-            )
-            Spacer(modifier = Modifier.height(SpaceMedium))
-            StandardTextField(
-                text = state.password,
-                hint = stringResource(id = R.string.password_hint),
-                onValueChange = viewModel::onPasswordValueChange,
-                onPasswordVisibilityChange = viewModel::onPasswordVisibilityChange,
-                passwordVisible = state.passwordVisible,
-                keyboardType = KeyboardType.Password,
-                leadingIcon = Icons.Rounded.Password
-            )
-            Spacer(modifier = Modifier.height(SpaceMedium))
-            Button(
-                onClick = viewModel::onLoginClick
-            ) {
-                Text(text = stringResource(id = R.string.login))
-            }
-            Spacer(modifier = Modifier.height(SpaceLarge))
-        }
+        Logo()
+        Spacer(modifier = Modifier.height(SpaceMedium))
+        LoginBox(
+            uiState = uiState,
+            onEmailValueChange = viewModel::onEmailValueChange,
+            onPasswordValueChange = viewModel::onPasswordValueChange,
+            onPasswordVisibilityChange = viewModel::onPasswordVisibilityChange,
+            onLoginClick = viewModel::onLoginClick
+        )
     }
+}
 
+@Composable
+private fun Logo(
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.25f)
+            .padding(top = SpaceLarge),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.Top
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.bpch_logo) ,
+            contentDescription = stringResource(id = R.string.logo),
+        )
+    }
+}
+
+@Composable
+private fun LoginBox(
+    uiState: LoginViewModel.UiState,
+    onEmailValueChange: (String) -> Unit,
+    onPasswordValueChange: (String) -> Unit,
+    onPasswordVisibilityChange: () -> Unit,
+    onLoginClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .border(4.dp, MaterialTheme.colorScheme.primary, Shapes.extraLarge),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Spacer(modifier = Modifier.height(SpaceLarge))
+        Text(text = "Login", style = MaterialTheme.typography.headlineSmall)
+        Spacer(modifier = Modifier.height(SpaceMedium))
+        StandardTextField(
+            text = uiState.email,
+            hint = stringResource(id = R.string.email_hint),
+            onValueChange = onEmailValueChange,
+            keyboardType = KeyboardType.Email,
+            leadingIcon = Icons.Rounded.Email
+        )
+        Spacer(modifier = Modifier.height(SpaceMedium))
+        StandardTextField(
+            text = uiState.password,
+            hint = stringResource(id = R.string.password_hint),
+            onValueChange = onPasswordValueChange,
+            onTextVisibilityChange = onPasswordVisibilityChange,
+            textVisible = uiState.passwordVisible,
+            keyboardType = KeyboardType.Password,
+            leadingIcon = Icons.Rounded.Password
+        )
+        Spacer(modifier = Modifier.height(SpaceMedium))
+        Button(
+            onClick = onLoginClick
+        ) {
+            Text(text = stringResource(id = R.string.login))
+        }
+        Spacer(modifier = Modifier.height(SpaceLarge))
+    }
 }
 
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
-private fun LoginScreenPreview() {
-    LoginScreen(rememberNavController())
+private fun LightModePreview() {
+    BPCHTheme {
+        LoginScreen(rememberNavController())
+    }
+}
+@Preview(showSystemUi = true, showBackground = true, uiMode = UI_MODE_NIGHT_YES)
+@Composable
+private fun DarkModePreview() {
+    BPCHTheme {
+        LoginScreen(rememberNavController())
+    }
 }

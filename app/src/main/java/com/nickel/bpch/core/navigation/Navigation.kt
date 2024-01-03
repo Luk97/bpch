@@ -1,9 +1,9 @@
 package com.nickel.bpch.core.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.nickel.bpch.feature_home.HomeScreen
 import com.nickel.bpch.feature_login.ui.LoginScreen
 import com.nickel.bpch.feature_profile.ProfileScreen
@@ -12,8 +12,9 @@ import com.nickel.bpch.feature_settings.SettingsScreen
 
 
 @Composable
-fun Navigation() {
-    val navController = rememberNavController()
+fun Navigation(
+    navController: NavHostController
+) {
     NavHost(
         navController = navController,
         startDestination = Screen.LoginScreen.route
