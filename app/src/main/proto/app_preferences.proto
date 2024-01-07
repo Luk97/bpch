@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option java_package = "com.nickel.bpch.proto";
+option java_multiple_files = true;
+
+message UserPreferences {
+  enum UiMode {
+    SYSTEM = 0;
+    DARK = 1;
+    LIGHT = 2;
+  }
+  enum ThemeColor {
+    CYAN = 0;
+    ORANGE = 1;
+    PURPLE = 2;
+  }
+
+  ThemeColor primaryColor = 1;
+  ThemeColor secondaryColor = 2;
+  ThemeColor tertiaryColor = 3;
+  UiMode uiMode = 4;
+}

@@ -1,55 +1,47 @@
 package com.nickel.bpch.core.ui
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material.icons.outlined.StarOutline
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nickel.bpch.core.navigation.BottomNavigationItem
-import com.nickel.bpch.core.navigation.Screen
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
-import javax.inject.Inject
+import com.nickel.bpch.core.data.UserData
+import com.nickel.bpch.core.domain.UserDataRepository
 import com.nickel.bpch.core.ui.MainViewModel.UiState.Loading
 import com.nickel.bpch.core.ui.MainViewModel.UiState.Success
-import kotlinx.coroutines.flow.update
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(): ViewModel() {
+class MainViewModel @Inject constructor(
+    userDataRepository: UserDataRepository
+): ViewModel() {
 
-    private val _state = MutableStateFlow<UiState>(Loading)
-    val state = _state.asStateFlow()
-
-
-
-    init {
-        viewModelScope.launch {
-            delay(1000L)
-            _state.update { Success() }
-        }
-    }
+    val state: StateFlow<UiState> = userDataRepository.userData.map {
+        Success(it)
+    }.stateIn(
+        scope = viewModelScope,
+        initialValue = Loading,
+        started = SharingStarted.WhileSubscribed(5_000)
+    )
 
     fun onBottomNavItemClick(index: Int) {
-        when (_state.value) {
-            is Success -> _state.update { Success(
+        /*
+        when (state.value) {
+            is Success -> state.value.update { Success(
                 bottomNavigationIndex = index
             ) }
             else -> Unit
         }
+         */
     }
 
     sealed interface UiState {
         data object Loading: UiState
         data class Success(
+            val userData: UserData,
+            /*
             val bottomNavigationItems: List<BottomNavigationItem> = listOf(
                 BottomNavigationItem(
                     label = "Home",
@@ -79,6 +71,7 @@ class MainViewModel @Inject constructor(): ViewModel() {
                 )
             ),
             val bottomNavigationIndex: Int = 0
+            */
         ): UiState
     }
 }

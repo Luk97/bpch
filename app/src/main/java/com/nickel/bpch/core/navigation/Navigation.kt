@@ -8,7 +8,7 @@ import com.nickel.bpch.feature_home.HomeScreen
 import com.nickel.bpch.feature_login.ui.LoginScreen
 import com.nickel.bpch.feature_profile.ProfileScreen
 import com.nickel.bpch.feature_quickmatch.QuickMatchScreen
-import com.nickel.bpch.feature_settings.SettingsScreen
+import com.nickel.bpch.feature_settings.ui.SettingsScreen
 
 
 @Composable
@@ -17,12 +17,12 @@ fun Navigation(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screen.LoginScreen.route
+        startDestination = Screen.SettingsScreen.route
     ) {
         composable(Screen.LoginScreen.route) { LoginScreen(navController) }
         composable(Screen.HomeScreen.route) { HomeScreen(navController) }
         composable(Screen.ProfileScreen.route) { ProfileScreen(navController) }
         composable(Screen.QuickMatchScreen.route) { QuickMatchScreen(navController) }
-        composable(Screen.SettingsScreen.route) { SettingsScreen(navController)}
+        composable(Screen.SettingsScreen.route) { SettingsScreen(navController) }
     }
 }

@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
     id("dagger.hilt.android.plugin")
+    id("com.google.protobuf")
 }
 
 android {
@@ -49,6 +50,27 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    protobuf {
+        protoc {
+            artifact = "com.google.protobuf:protoc:3.20.1"
+        }
+        generateProtoTasks {
+            all().forEach { task ->
+                task.builtins {
+                    java {
+                        create("java") {
+                            option("lite")
+                        }
+                    }
+                    kotlin {
+                        create("kotlin") {
+                            option("lite")
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 dependencies {
@@ -84,4 +106,21 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
     ksp("com.google.dagger:dagger-compiler:$hiltVersion")
     ksp("com.google.dagger:hilt-compiler:$hiltVersion")
+
+
+    // Room
+    val roomVersion = "2.6.1"
+    implementation("androidx.room:room-runtime:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
+    ksp("androidx.room:room-compiler:$roomVersion")
+
+    // DataStore
+    implementation("androidx.datastore:datastore:1.0.0")
+    implementation("com.google.protobuf:protobuf-javalite:3.21.5")
+    implementation("com.google.protobuf:protobuf-kotlin-lite:3.21.5")
+
+    // Coroutines
+    val coroutinesVersion = "1.7.1"
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
 }
